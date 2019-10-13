@@ -4,12 +4,12 @@ display_attributes:
     - use
     - tag
 targets:
-    10.0.0.0/16:
+    10.231.0.0/16:
         name: Sample
         use: CSS color example
         tag: test-tag
         color: lightblue
-    192.168.160.0/19:
+    10.239.128.0/17:
         name: Second Sample
         use: Hex color example
         tag: test-tag
