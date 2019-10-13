@@ -1,0 +1,16 @@
+root: 10.0.0.0/8
+display_attributes:
+    - name
+    - use
+    - tag
+targets:
+    10.0.0.0/16:
+        name: Sample
+        use: CSS color example
+        tag: test-tag
+        color: lightblue
+    192.168.160.0/19:
+        name: Second Sample
+        use: Hex color example
+        tag: test-tag
+        color: "#FFF"

@@ -1,0 +1,114 @@
+{% macro capitalize(text) %}
+    {{ text[0]|upper}}{{text[1:] }}
+{% endmacro %}
+<html>
+
+<head>
+    <title>Visual Subnet Calculator</title>
+    <style type="text/css">
+        BODY {
+            font-family: Arial, Verdana, sans-serif;
+        }
+
+        .calc {
+            font-family: Arial, Verdana, sans-serif;
+            font-size: 80%;
+            border-collapse: collapse;
+        }
+
+        .calc td {
+            border: 1px solid black;
+            min-width: 15px;
+            padding: 2px 5px;
+        }
+
+        .calc thead {
+            font-weight: bold;
+            background-color: #eeeeee;
+            text-align: center;
+        }
+
+        .maskSpan {
+            background-color: #cccccc;
+            text-align: right;
+            font-size: 85%;
+            font-weight: bold;
+            padding: 2px !important;
+        }
+
+        .maskSpanJoinable {
+            background-color: #cccccc;
+            text-align: center;
+            font-size: 85%;
+            font-weight: bold;
+            padding: 2px !important;
+        }
+
+        .rotate {
+            transform: rotate(90deg);
+            /* Legacy vendor prefixes that you probably don't need... */
+            /* Safari */
+            -webkit-transform: rotate(90deg);
+            /* Firefox */
+            -moz-transform: rotate(90deg);
+            /* IE */
+            -ms-transform: rotate(90deg);
+            /* Opera */
+            -o-transform: rotate(90deg);
+            /* Internet Explorer */
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+        }
+    </style>
+</head>
+
+<body>
+    <table class="calc" cellspacing="0" cellpadding="2">
+        <thead>
+            <tr>
+                <td>Subnet Address</td>
+                {% for header in headers %}
+                <td>{{ capitalize(header) }}</td>
+                {% endfor %}
+                <td id="joinHeader" colspan="{{ depth }}">Map</td>
+            </tr>
+        </thead>
+        <tbody id="calcbody">
+            {% for row in table_data %}
+            {% if 'color' in row['attributes'] %}
+            <tr style="background-color: {{ row['attributes']['color'] }};">
+                {% else %}
+            <tr>
+                {% endif %}
+                <td>{{ row['net'] }}</td>
+                <!-- Iterate over the attributes -->
+                {% for header in headers %}
+                {% if header in row['attributes'] %}
+                <td>{{ row['attributes'][header] }}</td>
+                {% else %}
+                <td></td>
+                {% endif %}
+                {% endfor %}
+                <!-- Colspan for this item's prefix-->
+                {% if 'color' in row['attributes'] %}
+                <td rowspan="1" colspan="{{ row['colspan'] }}" class="maskSpan"
+                    style="background-color: {{ row['attributes']['color'] }};"><p>/{{ row['prefix'] }}</p></td>
+                {% else %}
+                <td rowspan="1" colspan="{{ row['colspan'] }}" class="maskSpan"><p>/{{ row['prefix'] }}</p></td>
+                {% endif %}
+                <!-- Iterate over rowspans-->
+                {% for key,value in row['rowspan'].items() | sort() | reverse() %}
+                <td rowspan="{{ value }}" colspan="1" class="maskSpanJoinable">
+                    <p class="rotate">/{{ key }}</p>
+                </td>
+                {% endfor %}
+                <!--<td rowspan="11" colspan="1" class="maskSpanJoinable">8</td>-->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+</body>
+
+</html>
